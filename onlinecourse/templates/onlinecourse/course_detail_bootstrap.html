@@ -51,74 +51,51 @@
                 </div>
                 <div class="card-body">{{lesson.content}}</div>
             </div>
-            {% endfor %}
-        </div>
-        <!-- Task: show questions and choices -->
-        <!-- <HINT> Use Bootstrap Collapse to hide exam first, more details could be found here
-            https://www.w3schools.com/bootstrap4/bootstrap_collapse.asp-->
-
-        <!--A collapse example here:-->
-        <!-- <HINT> If user is authenticated, show course exam with a list of question -->
-        <!-- <HINT> Each example will have many questions -->
-        <!-- <HINT> Each question will have many choices -->
-        <br><br>
-        <center>
-            <button class='btn btn-primary' data-toggle="collapse" data-target="#exam_{{lesson.id}}">Start Final
-                Quiz</button>
+            <!-- Task: show questions and choices -->
+            <!-- <HINT> Use Bootstrap 4 Collapse to hide exam first, more details could be found here-->
+            {% if user.is_authenticated %}
             <br><br>
-        </center>
-        <div id="#exam_{{lesson.id}}" class="collapse">
-            {% if user.is_authenticated %}<br><br>
-            <center>
-                <h6>Please answer the following questions with multti-selection(select 2 choices)</h6>
-            </center>
-            <!-- <HINT> Create a form to collect the selected choices for all questions
-            <HINT> For each question choice, you may create a checkbox input like
-            <input type="check" name="choice_{{choice.id}}" id="{{choice.id}}" -->
-            {% for lesson in course.lesson_set.all %}
-            <!-- A choice submission form example -->
-            <form id="questionform" action="{% url 'onlinecourse:submit' course.id lesson.id %}" method="post">
-                <!--... for each question in the course ...-->
-                {% for question in lesson.question_set.all %}
-                <div class="card mt-1">
-                    <div class="card-header">
-                        <h5>{{ question.question_text}}</h5>
-                    </div>
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <!--... for each choice in the question ...-->
-                        {% for choice in question.choice_set.all %}
-                        <div class="form-check">
-                            <label class="form-check-label">
-                                <input type="checkbox" name="choice_{{choice.id}}" class="form-check-input"
-                                    id="{{choice.id}}" value="{{choice.id}}">{{ choice.choice_text }}
-                            </label>
+                <button data-toggle='collapse' data-target="#exam_{{lesson.id}}" class='btn btn-primary btn-block'>
+                    Enter Final Quiz
+                </button>
+            <br><br>
+            <!-- <HINT> If user is authenticated, show course exam with a list of question -->
+            <!-- <HINT> Each example will have many questions -->
+            <!-- <HINT> Each question will have many choices -->
+            <!-- <HINT> Create a form to collect the selected choices for all questions -->
+            <!-- <HINT> For each question choice, you may create a checkbox input like
+                <input type="check" name="choice_{{choice.id}}" id="{{choice.id}}" ...>-->
+            <!-- A choice submission form example-->
+            <div id='exam_{{lesson.id}}' class="collapse">
+                <form id="questionform" action="{% url 'onlinecourse:submit' course.id lesson.id %}" method="post">
+                    <!-- for each question in the course -->
+                    {% for question in lesson.question_set.all %}
+                    <div class="card mt-1">
+                        <div class="card-header">
+                            <h5>{{ question.question_text}}</h5>
                         </div>
-                        {% endfor %}
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <!--for each choice in the question -->
+                            {% for choice in question.choice_set.all %}
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input type="checkbox" name="choice_{{choice.id}}" class="form-check-input"
+                                        id="{{choice.id}}" value="{{choice.id}}">{{ choice.choice_text }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                {% endfor %}
-            {% endfor %}
-                </div>
-                <input class="btn btn-success btn-block" type="submit" value="Submit">
-            </form>
-            {% else %}
-            <div>
-                <h6>Please Login or Sign up before start Final Quiz</h6>
-                <form class="form-inline" action="{% url 'onlinecourse:login' %}" method="post">
-                    {% csrf_token %}
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Username" name="username">&nbsp;
-                        <input type="password" class="form-control" placeholder="Password" name="psw">&nbsp;
-                        <button class="btn btn-primary" type="submit">Login</button>&nbsp;
-                        <a class="btn btn-outline-primary" href="{% url 'onlinecourse:registration' %}">Sign Up</a>
-                    </div>
+                    {% endfor %}
+                    <input class="btn btn-success btn-block" type="submit" value="Submit">
                 </form>
             </div>
             {% endif %}
+            {% endfor %}
         </div>
-
-        <!--Check here to see more details Bootstrap checkbox
-             https://www.w3schools.com/bootstrap4/bootstrap_forms_inputs.asp-->
     </div>
 </body>
+
 </html>
+<!--See more details Bootstrap checkbox -->
