@@ -63,18 +63,21 @@
         <!-- <HINT> Each question will have many choices -->
         <br><br>
         <center>
-            <button class='btn btn-primary' data-toggle="collapse" data-target="#exam">Enter Final Quiz</button>
+            <button class='btn btn-primary' data-toggle="collapse" data-target="#exam_{{lesson.id}}">Start Final
+                Quiz</button>
             <br><br>
         </center>
-        <div id="exam" class="collapse">
+        <div id="#exam_{{lesson.id}}" class="collapse">
             {% if user.is_authenticated %}<br><br>
-            <center><h6>Please answer the following question with multti-selection</h6></center>
+            <center>
+                <h6>Please answer the following questions with multti-selection(select 2 choices)</h6>
+            </center>
             <!-- <HINT> Create a form to collect the selected choices for all questions
             <HINT> For each question choice, you may create a checkbox input like
             <input type="check" name="choice_{{choice.id}}" id="{{choice.id}}" -->
             {% for lesson in course.lesson_set.all %}
             <!-- A choice submission form example -->
-            <form id="questionform" action="point to a submit view" method="post">
+            <form id="questionform" action="{% url 'onlinecourse:submit' course.id lesson.id %}" method="post">
                 <!--... for each question in the course ...-->
                 {% for question in lesson.question_set.all %}
                 <div class="card mt-1">
@@ -93,14 +96,14 @@
                         </div>
                         {% endfor %}
                     </div>
-                    {% endfor %}
-                    {% endfor %}
+                {% endfor %}
+            {% endfor %}
                 </div>
                 <input class="btn btn-success btn-block" type="submit" value="Submit">
             </form>
             {% else %}
             <div>
-                <h6>Please Login or Sign up</h6>
+                <h6>Please Login or Sign up before start Final Quiz</h6>
                 <form class="form-inline" action="{% url 'onlinecourse:login' %}" method="post">
                     {% csrf_token %}
                     <div class="input-group">
@@ -118,5 +121,4 @@
              https://www.w3schools.com/bootstrap4/bootstrap_forms_inputs.asp-->
     </div>
 </body>
-
 </html>
