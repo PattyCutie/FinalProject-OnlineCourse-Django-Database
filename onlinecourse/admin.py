@@ -30,11 +30,6 @@ class LessonAdmin(admin.ModelAdmin):
 # Add class model admin below>>
 class QuestionAdmin(admin.ModelAdmin):
     inlines = [ChoiceInline]
-    fields = ['lesson', 'question_text']
-
-class ChoiceAdmin(admin.ModelAdmin):
-    fields = ['question', 'choice_text']
-
 
 # <HINT> Register Question and Choice models here
 
@@ -43,4 +38,4 @@ admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Instructor)
 admin.site.register(Learner)
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(Choice, ChoiceAdmin)
+admin.site.register(Choice)
