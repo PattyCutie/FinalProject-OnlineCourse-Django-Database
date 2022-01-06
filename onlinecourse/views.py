@@ -1,3 +1,4 @@
+from django.db.models.enums import Choices
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 # <HINT> Import any new Models here
@@ -120,12 +121,10 @@ def submit(request, course_id, lesson_id):
     selected_choices = extract_answers(request)
     submission.choices.set(selected_choices)
 
-    
-
     return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(course.id, lesson.id, submission.id)))
 
-
-# <HINT> def extract_answers // A example method to collect the selected choices from the exam form from the request object
+# <HINT> def extract_answers // A example method to collect the selected choices 
+# from the exam form from the request object
 def extract_answers(request):
     submitted_answers = []
     for key in request.POST:
@@ -133,9 +132,9 @@ def extract_answers(request):
             value = request.POST[key]
             choice_id = int(value)
             submitted_answers.append(choice_id)
+
     return submitted_answers
-
-
+    
 # <HINT> Create an exam result view to check if learner passed exam and show their question results and result for each question,
 # you may implement it based on the following logic:
         # Get course and submission based on their ids
@@ -154,13 +153,15 @@ def show_exam_result(request, course_id, lesson_id, submission_id):
 
     full_score = 0
     total_score = 0
+    
     for question in questions:
         full_score += question.grade
+    
         if question.is_get_score(selected_choices):
-            total_score += question.grade
+            total_score += question.grade   
 
     final_score = round((total_score/full_score)*100)
-
+    
     context = {
         'course' : course,
         'lesson' : lesson,
@@ -168,6 +169,7 @@ def show_exam_result(request, course_id, lesson_id, submission_id):
         'grade' : final_score,
     }
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
+
 
     
 

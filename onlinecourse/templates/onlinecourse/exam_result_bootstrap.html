@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     {% load static %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>OnlineCourse App With Django</title>
 </head>
 <body>
 
@@ -46,7 +47,7 @@
             <!--HINT Display failed info -->
             <p><b>Failed</b> Sorry, {{ user.username }}!! You have failed the final Quiz with score {{ grade }}/100</p>
         </div>
-        <a class="btn btn-link text-danger" href="{% url 'onlinecourse:course_details' course.id %}">Re-test</a>
+        <a class="btn btn-link text-danger" href="{% url 'onlinecourse:course_details' course.id %}"><h5>Re-test</h5></a>
         {% endif %}
 
         <div class="card-columns-vertical mt-1">
@@ -55,7 +56,7 @@
             {% for question in lesson.question_set.all %}
             <div class='card mt-1'>
                 <div class="card-header">
-                    <h5>{{ question.question_text }}</h5>
+                    <h5>{{question.id}}. {{ question.question_text }}</h5>
                 </div>
                 <div class="card-body">
                     <!---for each choice in the question-->
@@ -63,15 +64,18 @@
                         {% if choice in selected_choices %}
                             {% if choice.is_correct %}
                                 <!-- if correct answer-->
-                                <p class='text-success'>This is Correct Answer: {{ choice }}</p>
+                                <p class='text-success'><b>Correct Answer:</b> {{ choice }}</p>
                             {% else %}
                                 <!--if wrong answer -->
-                                <p class='text-danger'>This is Wrong Answer: {{ choice }}</p>
+                                <p class='text-danger'><b>Wrong Answer:</b> {{ choice }}</p>
                             {% endif %}
                         {% else %}
                             {% if choice.is_correct %}
                             <!-- unselect correct answer-->
-                            <p class='text-warning'>This is Correct Answer but not selected {{ choice }}</p>
+                            <p class='text-warning'><b>Correct Answer but not selected:</b> {{ choice }}</p>
+                            {% else %}
+                            <!-- unselect wrong answer-->
+                            <p ><b>Wrong Answer:</b> {{ choice }}</p>
                             {% endif %}
                         {% endif %}
                     {% endfor %}
